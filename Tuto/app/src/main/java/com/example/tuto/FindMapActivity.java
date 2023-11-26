@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 
@@ -31,7 +32,7 @@ public class FindMapActivity extends AppCompatActivity {
                     Player opponent = c.findMatch(p);
                     if(opponent != null){
                         Intent intent = new Intent(FindMapActivity.this, CaroGameActivity.class);
-                        // intent.putExtra();
+                         intent.putExtra("Opponent", (Parcelable) opponent);
                         startActivity(intent);
                     }
 

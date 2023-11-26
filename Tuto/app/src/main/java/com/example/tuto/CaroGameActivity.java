@@ -10,18 +10,30 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import model.Cell;
+import model.Player;
+import network.Client;
+
 public class CaroGameActivity extends AppCompatActivity {
 
     private static final int BOARD_SIZE = 9;
     private Button[][] buttons;
-
+    Client c = new Client();
+    public Cell publicCell;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caro_game);
 
         createBoard();
-
+        Player opponentModel = null;
+        if(getIntent().hasExtra("Opponent")){
+            opponentModel = getIntent().getParcelableExtra("Opponent");
+            System.out.println(opponentModel.getName());
+        }
+        publicCell = new Cell();
+        publicCell.setRowIndex(-1);
+        publicCell.setColIndex(-1);
 
     }
 
@@ -58,37 +70,45 @@ public class CaroGameActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCellClick(row, col);
+                publicCell.setRowIndex(row);
+                publicCell.setColIndex(col);
             }
         });
 
         return button;
     }
 
-    private void onCellClick(int row, int col) {
-
-        // Handle the click event for the cell at position (row, col)
-        // You can implement your game logic here
-
-        // For example, you can set a mark (X or O) on the clicked cell
-        int imageSource = R.drawable.opng;
-        buttons[row][col].setBackground(getResources().getDrawable(imageSource));
-
-        // Check for game completion, winner, etc.
-
-        // Replace "X" with your game logic, and implement the complete game accordingly.
-    }
+//    private void onCellClick(int row, int col) {
+//
+//        String instruction = c.receiveInstruction();
+//        if(instruction.equals("ack")){
+//            int imageSource = R.drawable.opng;
+//            buttons[row][col].setBackground(getResources().getDrawable(imageSource));
+//        }
+//    }
     public void gameLoop() {
         while(true) {
             // receive instruction
             // receive turn
-            String instruction = ""; // response from server
+            String instruction = c.receiveInstruction(); // response from server
             while(instruction.equals("your-turn")){
-                // o
+                if(publicCell.getRowIndex() != -1 && publicCell.getColIndex() != -1){
+                    c.sendCoordinate(publicCell);
+                    String receivedInstruction = c.receiveInstruction();
+                    if(receivedInstruction.equals("ack")){
+                        int imageSource = R.drawable.opng;
+                         buttons[publicCell.getRowIndex()][publicCell.getColIndex()].setBackground(getResources().getDrawable(imageSource));
+                         break;
+                    }
+                    publicCell.setRowIndex(-1);
+                    publicCell.setColIndex(-1);
+                }
 
             }
             while(instruction.equals("enemy-turn")){
-                // x
+                Cell receivedObject = c.receiveCoordinate();
+                int imageSource = R.drawable.xpng;
+                buttons[receivedObject.getRowIndex()][publicCell.getColIndex()].setBackground(getResources().getDrawable(imageSource));
             }
         }
     }

@@ -50,7 +50,7 @@ public class Cell implements Serializable{
 
     @Override
     public String toString() {
-        return rowIndex + "," + colIndex;
+        return rowIndex + ":" + colIndex;
     }
 
 }

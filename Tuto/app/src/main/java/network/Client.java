@@ -40,16 +40,9 @@ public class Client {
             Player response = null;
             long timeoutMillis = System.currentTimeMillis() + 10000;
             while(System.currentTimeMillis() < timeoutMillis) {
-                if(objectInputStream.available() > 0) {
-                    response = (Player) objectInputStream.readObject();
-                    if(response != null) break;
-                } else {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                response = (Player) objectInputStream.readObject();
+                if(response != null) break;
+
             }
             if (response != null) return response;
         } catch (Exception e) {
@@ -82,12 +75,22 @@ public class Client {
 
     public void sendCoordinate(Cell cell) {
         try {
-            dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            dataOutputStream.writeUTF(cell.toString());
-            dataOutputStream.flush();
+            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            objectOutputStream.writeObject(cell);
+            objectOutputStream.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public Cell receiveCoordinate(){
+        try {
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
+            Cell cell = (Cell) objectInputStream.readObject();
+            return cell;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Socket getSocket() {
@@ -97,6 +100,5 @@ public class Client {
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
-
 
 }
