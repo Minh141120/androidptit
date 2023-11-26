@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_marginTop="50dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Caro Game"
+        android:textAlignment="center"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:layout_marginTop="150dp"
+        android:layout_gravity="center"
+        android:id="@+id/idPlayGame"
+        android:layout_width="wrap_content"
+        android:text="Play Game"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_marginTop="25dp"
+
+        android:layout_gravity="center"
+        android:id="@+id/idOptions"
+        android:layout_width="wrap_content"
+        android:text="Options"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_marginTop="25dp"
+
+        android:layout_gravity="center"
+        android:id="@+id/idExit"
+        android:text="Exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
