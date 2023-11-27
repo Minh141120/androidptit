@@ -12,13 +12,13 @@ import model.Pair;
 import model.Player;
 
 public class Client {
-    private Socket socket;
+    public static Socket socket;
     private static String serverAddress = "127.0.0.1"; // serverAddress
     private static int port = 4444;
-    private DataInputStream dataInputStream;
-    private ObjectOutputStream objectOutputStream;
-    private ObjectInputStream objectInputStream;
-    private DataOutputStream dataOutputStream;
+    private static DataInputStream dataInputStream;
+    private static ObjectOutputStream objectOutputStream;
+    private static ObjectInputStream objectInputStream;
+    private static DataOutputStream dataOutputStream;
     public Client() {
 
     }
@@ -63,8 +63,9 @@ public class Client {
         return null;
     }
 
-    public String receiveInstruction() {
+    public static String receiveInstruction() {
         try {
+            dataInputStream = new DataInputStream(socket.getInputStream());
             String instruction = dataInputStream.readUTF();
             return instruction;
         } catch (Exception e) {
@@ -73,7 +74,7 @@ public class Client {
         return "";
     }
 
-    public void sendCoordinate(Cell cell) {
+    public static void sendCoordinate(Cell cell) {
         try {
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.writeObject(cell);
@@ -82,7 +83,7 @@ public class Client {
             e.printStackTrace();
         }
     }
-    public Cell receiveCoordinate(){
+    public static Cell receiveCoordinate(){
         try {
             objectInputStream = new ObjectInputStream(socket.getInputStream());
             Cell cell = (Cell) objectInputStream.readObject();

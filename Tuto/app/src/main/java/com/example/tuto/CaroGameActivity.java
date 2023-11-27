@@ -18,7 +18,6 @@ public class CaroGameActivity extends AppCompatActivity {
 
     private static final int BOARD_SIZE = 9;
     private Button[][] buttons;
-    Client c = new Client();
     public Cell publicCell;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +89,11 @@ public class CaroGameActivity extends AppCompatActivity {
         while(true) {
             // receive instruction
             // receive turn
-            String instruction = c.receiveInstruction(); // response from server
+            String instruction = Client.receiveInstruction(); // response from server
             while(instruction.equals("your-turn")){
                 if(publicCell.getRowIndex() != -1 && publicCell.getColIndex() != -1){
-                    c.sendCoordinate(publicCell);
-                    String receivedInstruction = c.receiveInstruction();
+                    Client.sendCoordinate(publicCell);
+                    String receivedInstruction = Client.receiveInstruction();
                     if(receivedInstruction.equals("ack")){
                         int imageSource = R.drawable.opng;
                          buttons[publicCell.getRowIndex()][publicCell.getColIndex()].setBackground(getResources().getDrawable(imageSource));
@@ -106,7 +105,7 @@ public class CaroGameActivity extends AppCompatActivity {
 
             }
             while(instruction.equals("enemy-turn")){
-                Cell receivedObject = c.receiveCoordinate();
+                Cell receivedObject = Client.receiveCoordinate();
                 int imageSource = R.drawable.xpng;
                 buttons[receivedObject.getRowIndex()][publicCell.getColIndex()].setBackground(getResources().getDrawable(imageSource));
             }
